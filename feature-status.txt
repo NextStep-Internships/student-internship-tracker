@@ -1,0 +1,117 @@
+PROJECT FUNCTIONALITY STATUS
+
+-----------------------------------------------------------------
+FRONTEND FUNCTIONALITY
+-----------------------------------------------------------------
+1. Login / Authentication
+   - Email/password login page with validation, loading state, and error/success toasts. (Completed)
+   - Show/hide password toggle. (Completed)
+   - Login request to backend `/api/auth/login` and bearer token storage in `localStorage`. (Completed)
+   - Role-based redirect after login: `ETUDIANT -> /student`, `ENCADRANT -> /supervisor`, others -> /admin. (Completed)
+   - Private routing via `useAuthStore` and `PrivateRoute`. (Completed)
+   - Forgot password button on login page exists but has no implemented action. (Not completed)
+
+2. Student dashboard
+   - UI for internship dashboard with sidebar, top bar, charts, cards, and recent report listings. (Completed)
+   - Fetches report data from backend `/api/rapports`. (Completed)
+   - Computes summary statistics: total reports, submitted, validated, rejected, completion score, on-time rate. (Completed)
+   - Displays a line chart and pie chart based on fetched reports. (Completed)
+   - Displays recent submissions list and status badges. (Completed)
+   - Dark theme toggle using `useTheme`. (Completed)
+   - Logout button works and redirects to `/login`. (Completed)
+   - Search field in UI is present but not wired to any search logic. (Not completed)
+   - "NEW SUBMISSION" button is UI-only and does not open a submission form. (Not completed)
+   - "View All" button in recent submissions is UI-only. (Not completed)
+   - Settings and Support buttons are UI-only. (Not completed)
+
+3. Supervisor dashboard
+   - UI for supervisor portal with sidebar, top bar, charts, pending review list, and active student list. (Completed)
+   - Fetches reports from `/api/rapports` and users from `/api/users`. (Completed)
+   - Computes supervisor stats: active students, review rate, pending reviews, total reports. (Completed)
+   - Displays bar and line charts for report status and review progress. (Completed)
+   - Displays pending review cards for submitted reports. (Completed)
+   - Displays active student progress list. (Completed)
+   - Dark theme toggle works. (Completed)
+   - Logout button works. (Completed)
+   - Search field is UI-only and has no search behavior. (Not completed)
+   - "View All" button is UI-only. (Not completed)
+   - Review action buttons are UI-only and do not call backend review endpoints. (Not completed)
+   - Settings and Support buttons are UI-only. (Not completed)
+
+4. Admin dashboard
+   - Placeholder page displayed for `/admin`. (Completed as placeholder)
+   - No admin management features are implemented yet. (Not completed)
+
+5. Authentication store
+   - `authStore` persists token, role, and name in `localStorage`. (Completed)
+   - Logout clears stored auth data. (Completed)
+   - Note: `LoginPage` stores email as displayed name when backend returned name is not connected. (Partial)
+
+-----------------------------------------------------------------
+BACKEND FUNCTIONALITY
+-----------------------------------------------------------------
+1. Authentication
+   - `/api/auth/login` REST endpoint implemented in `AuthController`. (Completed)
+   - `/api/auth/register` REST endpoint implemented in `AuthController`. (Completed backend)
+   - Security config permits `/api/auth/login` publicly. (Completed)
+   - Security config requires ADMIN role for `/api/auth/register`. (Completed)
+   - All other API requests require JWT authentication. (Completed)
+
+2. Reports (`RapportController`)
+   - `GET /api/rapports` returns all reports. (Completed)
+   - `GET /api/rapports/{id}` returns a report by id. (Completed)
+   - `GET /api/rapports/etudiant/{auteurId}` returns reports by student. (Completed)
+   - `GET /api/rapports/encadrant/{encadrantId}` returns reports by supervisor. (Completed)
+   - `POST /api/rapports` creates a report from request body. (Completed)
+   - `PUT /api/rapports/{id}/valider` validates or updates report status. (Completed)
+   - `DELETE /api/rapports/{id}` deletes a report. (Completed)
+
+3. User management (`UserController`)
+   - `GET /api/users` returns all users. (Completed)
+   - `GET /api/users/{id}` returns a user by id. (Completed)
+   - `DELETE /api/users/{id}` deletes a user. (Completed)
+
+4. Supervision requests (`DemandeEncadrementController`)
+   - `POST /api/demandes` submits a supervision request. (Completed)
+   - `PUT /api/demandes/{id}/repondre` accepts/rejects a request. (Completed)
+   - `GET /api/demandes/encadrant/{encadrantId}` fetches supervisor requests. (Completed)
+   - `GET /api/demandes/etudiant/{etudiantId}` fetches student requests. (Completed)
+   - `GET /api/demandes/encadrant/{encadrantId}/en-attente` fetches pending supervisor requests. (Completed)
+
+5. Notifications (`NotificationController`)
+   - `GET /api/notifications/user/{userId}` returns notifications for a user. (Completed)
+   - `GET /api/notifications/user/{userId}/unread` returns unread notifications. (Completed)
+   - `POST /api/notifications` creates a new notification. (Completed)
+   - `PUT /api/notifications/{id}/lire` marks a notification as read. (Completed)
+
+6. Deadlines (`DeadlineController`)
+   - `GET /api/deadlines` returns deadlines. (Completed)
+   - `POST /api/deadlines` creates a deadline. (Completed)
+   - `DELETE /api/deadlines/{id}` deletes a deadline. (Completed)
+
+-----------------------------------------------------------------
+INTEGRATION STATUS
+-----------------------------------------------------------------
+- Frontend login and dashboard routing are integrated with backend auth. (Completed)
+- Student and supervisor dashboards use backend report and user endpoints. (Completed)
+- Several backend APIs exist but are not surfaced in the current frontend:
+  * Registration flow (`/api/auth/register`) (Not integrated)
+  * Deadline management (`/api/deadlines`) (Not integrated)
+  * Notification management (`/api/notifications`) (Not integrated)
+  * Supervision request workflow (`/api/demandes`) (Not integrated)
+  * User delete and admin actions. (Not integrated)
+- UI actions that are present but not wired to backend behavior:
+  * Search fields (frontend only)
+  * NEW SUBMISSION buttons (frontend only)
+  * View All buttons (frontend only)
+  * Settings / Support actions (frontend only)
+  * Review action buttons in supervisor dashboard (frontend only)
+  * Forgot password link (frontend only)
+
+-----------------------------------------------------------------
+SUMMARY
+-----------------------------------------------------------------
+- Completed: frontend login, authentication, student dashboard display, supervisor dashboard display, token-based route protection, backend auth, report, user, request, notification, and deadline endpoints.
+- Not completed: admin management, frontend submission creation, review action execution, search behavior, forgot password workflow, backend endpoint coverage in UI for deadlines/notifications/demandes, full admin UI.
+
+Use this file as a status checklist for an AI or developer to know which parts are already built and which parts still need frontend/backend integration.
